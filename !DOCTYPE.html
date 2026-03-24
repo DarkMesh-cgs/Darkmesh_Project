@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkMesh | Personal Security Ecosystem</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Paleta de colores DarkMode */
+            --bg-color: #030303; /* Negro casi absoluto para el fondo */
+            --panel-bg: #101010; /* Negro para paneles */
+            --text-main: #f0f6fc; /* Blanco grisáceo */
+            --text-muted: #8b949e; /* Gris */
+            --accent-purple: #9b4dca; /* Púrpura brillante */
+            --accent-green: #00ff41; /* Verde neón (acento) */
+            --accent-blue: #58a6ff; /* Azul (acento) */
+            --border-color: #2a2a2a;
+            --shadow: 0 8px 32px 0 rgba(155, 77, 202, 0.2); /* Sombra púrpura */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Barra de Navegación */
+        nav {
+            background-color: rgba(16, 16, 16, 0.95);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        nav .logo {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+            text-shadow: 0 0 10px var(--accent-purple);
+            letter-spacing: 0.1em;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: var(--accent-purple);
+        }
+
+        /* Hero Section (Arco Púrpura) */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at 50% -20%, #2a0a4a 0%, var(--bg-color) 70%);
+            padding-top: 80px; /* offset nav */
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 50%;
+            background: radial-gradient(ellipse at center, rgba(155, 77, 202, 0.3) 0%, rgba(3, 3, 3, 0) 70%);
+            filter: blur(60px);
+            z-index: 1;
+        }
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(155, 77, 202, 0.8);
+        }
+        .hero h1 .dark { color: var(--accent-purple); }
+        .hero h1 .mesh { color: var(--text-main); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        .hero-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent-purple);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(155, 77, 202, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(155, 77, 202, 0.8);
+        }
+
+        /* Contenedor General */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* Títulos de Sección */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+            font-weight: 300;
+        }
+
+        /* Módulos (Cards de 3 columnas) */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .module-card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-purple);
+            box-shadow: var(--shadow);
+        }
+        .module-card i {
+            font-size: 2.5rem;
+            color: var(--accent-purple);
+            margin-bottom: 25px;
+        }
+        .module-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .module-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        /* Gradient sutil en el borde inferior */
+        .module-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(155, 77, 202, 0) 0%, var(--accent-purple) 50%, rgba(155, 77, 202, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .module-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Tecnologías (Grid de iconos con info en hover) */
+        .tech-section {
+            background-color: var(--panel-bg);
+            border-radius: 20px;
+            padding: 80px 40px;
+            margin-top: 80px;
+            position: relative;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 tecnologías */
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+        .tech-item {
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+        }
+        .tech-item i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+        }
+        .tech-item p.tech-name {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+        
+        /* Hover state para iconos */
+        .tech-item:hover i {
+            color: var(--accent-purple);
+            transform: scale(1.1);
+            text-shadow: 0 0 15px rgba(155, 77, 202, 0.6);
+        }
+        .tech-item:hover p.tech-name {
+            color: var(--text-main);
+        }
+
+        /* Contenedor de info detallada que aparece debajo */
+        .tech-info-panel {
+            grid-column: 1 / -1; /* Ocupa todo el ancho */
+            background-color: rgba(3, 3, 3, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            text-align: left;
+        }
+        /* Clase para JS que muestra el panel */
+        .tech-info-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .tech-info-panel h4 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: var(--accent-purple);
+        }
+        .tech-info-panel p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 50px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        footer p {
+            margin-bottom: 10px;
+        }
+        footer .credits {
+            font-size: 0.8rem;
+        }
+
+        /* Animación suave de aparición */
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividad (Móvil) */
+        @media (max-width: 900px) {
+            .modules-grid, .tech-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .hero h1 { font-size: 2.5rem; }
+            .tech-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">DARKMESH_</div>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#modulos">Módulos</a></li>
+            <li><a href="#tecnologias">Tecnologías</a></li>
+            <li><a href="#" class="hero-btn" style="padding: 8px 20px;">Contactar</a></li>
+        </ul>
+    </nav>
+
+    <section id="inicio" class="hero">
+        <div class="hero-content fade-in">
+            <h1><span class="dark">DARK</span><span class="mesh">MESH</span></h1>
+            <p>Ecosistema Modular de Seguridad Avanzada. Gestión de identidad, auditoría de redes y contrainteligencia táctica para entornos personales y críticos.</p>
+            <a href="#modulos" class="hero-btn">Explorar Módulos</a>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <section id="modulos">
+            <h2 class="section-title fade-in">Nuestros Módulos Operativos</h2>
+            <p class="section-subtitle fade-in">Soluciones de seguridad integral para la integridad de sus datos y redes.</p>
+            
+            <div class="modules-grid">
+                <div class="module-card fade-in">
+                    <i class="fa-solid fa-lock"></i>
+                    <h3>Vault_Secure</h3>
+                    <p>El núcleo de confianza de su ecosistema. Resguarda de forma absoluta credenciales críticas y bóvedas de contraseñas, asegurando que ninguna identidad quede expuesta ante filtraciones.</p>
+                </div>
+                
+                <div class="module-card fade-in">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <h3>DarkMesh_Nexus</h3>
+                    <p>Centro de comando centralizado para la infraestructura de red. Se especializa en el análisis, tratamiento preventivo y resolución de problemas complejos en el área de redes y telecomunicaciones.</p>
+                </div>
+
+                <div class="module-card fade-in">
+                    <i class="fa-solid fa-user-secret"></i>
+                    <h3>DarkMesh_Labs</h3>
+                    <p>Nuestro producto estrella de defensa y contrainteligencia. Despliega operaciones de hacking ético, pentesting y herramientas avanzadas de ciberseguridad para ejecutar el trabajo sucio y neutralizar amenazas.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tecnologias" class="tech-section fade-in">
+            <h2 class="section-title">Stack Tecnológico Integrado</h2>
+            <p class="section-subtitle">Herramientas de vanguardia para la robustez del sistema.</p>
+            
+            <div class="tech-grid">
+                <div class="tech-item" data-tech="gocryptfs">
+                    <i class="fa-solid fa-user-lock"></i>
+                    <p class="tech-name">Gocryptfs</p>
+                </div>
+                <div class="tech-item" data-tech="ubuntu">
+                    <i class="fa-brands fa-ubuntu"></i>
+                    <p class="tech-name">Ubuntu</p>
+                </div>
+                <div class="tech-item" data-tech="kali">
+                    <i class="fa-solid fa-dragon"></i>
+                    <p class="tech-name">Kali Linux</p>
+                </div>
+                <div class="tech-item" data-tech="parrot">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <p class="tech-name">Parrot OS</p>
+                </div>
+                <div class="tech-item" data-tech="gemini">
+                    <i class="fa-solid fa-robot"></i>
+                    <p class="tech-name">Gemini</p>
+                </div>
+                <div class="tech-item" data-tech="chatgpt">
+                    <i class="fa-solid fa-brain"></i>
+                    <p class="tech-name">ChatGPT</p>
+                </div>
+                <div class="tech-item" data-tech="bitlocker">
+                    <i class="fa-solid fa-key"></i>
+                    <p class="tech-name">BitLocker</p>
+                </div>
+
+                <div id="tech-info-panel" class="tech-info-panel">
+                    <h4 id="tech-title">Seleccione una herramienta</h4>
+                    <p id="tech-desc">Pase el cursor sobre un icono para ver los detalles operativos.</p>
+                </div>
+            </div>
+        </section>
+
+    </div> <footer>
+        <p>&copy; 2026 Sistema DarkMesh | Operaciones de Seguridad Estratégica</p>
+        <p class="credits">Proyecto académico para UTC Technology Labs.</p>
+    </footer>
+
+    <script>
+        // Datos técnicos (puedes editar los textos aquí)
+        const techData = {
+            'gocryptfs': {
+                title: 'Gocryptfs: Cifrado a nivel de archivo',
+                desc: 'Aplica cifrado AES-GCM-256 a directorios específicos para proteger archivos sensibles sin comprometer el rendimiento general del sistema.'
+            },
+            'ubuntu': {
+                title: 'Ubuntu: Base estable y robusta',
+                desc: 'Sistema operativo Linux de grado empresarial que sirve como cimiento seguro y fiable para alojar todas las operaciones operativas y scripts de DarkMesh.'
+            },
+            'kali': {
+                title: 'Kali Linux: Arsenal de Pentesting',
+                desc: 'Utilizado como plataforma principal para auditorías de red en DarkMesh_Labs, análisis de vulnerabilidades y pruebas de penetración avanzada.'
+            },
+            'parrot': {
+                title: 'Parrot OS Security: Anonimato y Defensa',
+                desc: 'Entorno enfocado en la seguridad operativa (OpSec) y anonimato, fundamental para las operaciones de contrainteligencia de DarkMesh_Labs.'
+            },
+            'gemini': {
+                title: 'Gemini: Motor de IA Avanzada',
+                desc: 'Integrado para análisis predictivo de amenazas, prompt engineering estratégico y automatización inteligente de tareas de monitoreo de seguridad.'
+            },
+            'chatgpt': {
+                title: 'ChatGPT: Automatización y Desarrollo',
+                desc: 'Utilizado para el desarrollo rápido de herramientas a medida, scripts de automatización de defensa y depuración de logs de red de forma eficiente.'
+            },
+            'bitlocker': {
+                title: 'BitLocker: Cifrado de Disco Completo',
+                desc: 'Asegura que el hardware físico esté protegido. Cifra el volumen completo para evitar la extracción de datos en caso de pérdida o robo físico del equipo.'
+            }
+        };
+
+        const techItems = document.querySelectorAll('.tech-item');
+        const infoPanel = document.getElementById('tech-info-panel');
+        const techTitle = document.getElementById('tech-title');
+        const techDesc = document.getElementById('tech-desc');
+
+        // Función para mostrar la info
+        techItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const techKey = this.getAttribute('data-tech');
+                if (techData[techKey]) {
+                    techTitle.textContent = techData[techKey].title;
+                    techDesc.textContent = techData[techKey].desc;
+                    infoPanel.classList.add('active'); // Muestra el panel con transición
+                }
+            });
+
+            item.addEventListener('mouseleave', function() {
+                // Opción: Ocultar al quitar el cursor
+                // infoPanel.classList.remove('active');
+            });
+        });
+    </script>
+
+    </body>
+</html>
